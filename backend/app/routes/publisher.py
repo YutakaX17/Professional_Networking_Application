@@ -215,6 +215,33 @@ def get_job_statuses():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@publisher_bp.route('/jobs/<int:job_id>', methods=['PUT'])
+def update_job(job_id):
+    try:
+        auth_header = request.headers.get('Authorization')
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return jsonify({'error': 'Valid authorization token required'}), 401
+
+        token = auth_header.split(' ')[1]
+        payload = decode_token(token)
+        publisher_id = payload['user_id']
+
+        job = Job.query.get(job_id)
+        if not job or job.publisher_id != publisher_id:
+            return jsonify({'error': 'Job not found or unauthorized'}), 404
+
+        data = request.json
+        job.description = data.get('description', job.description)
+        job.responsibilities = data.get('responsibilities', job.responsibilities)
+        job.requirements = data.get('requirements', job.requirements)
+        job.salary_range = data.get('salary_range', job.salary_range)
+        db.session.commit()
+
+        return jsonify({'message': 'Job updated successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 @publisher_bp.route('/applications', methods=['GET'])
 def get_applications():
