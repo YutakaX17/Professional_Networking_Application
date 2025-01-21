@@ -118,13 +118,28 @@ To get started with the application, follow these steps:
 ### 4.2.3. Application Review
 **The Application Review feature allows users to review and manage job applications:**
 - View Applications: View and manage
+
+![Application.PNG](Application.PNG)
 - Review Applications: Review and manage job applications.
+- Click on the "Approve or Reject" button.
+
+![Review.PNG](Review.PNG)
 - Accept or Reject Applications: Accept or reject job applications.
+- Click on the "Accept" or "Reject" button.
+
+![Accept_Reject.PNG](Accept_Reject.PNG)
 - Send Interview Invitations: Send interview invitations to selected applicants.
 - Track Application Status: Track the status of job applications.
 - View Application Details: View detailed information about a specific job application.
+- Click on the "View Details" button.
+![Application_details.PNG](Application_details.PNG)
 - Download Application Documents: Download application documents.
+- Click on the "Download" button.
+
+![Download.PNG](Download.PNG)
 - Delete Applications: Delete job applications.
+- Click on the "Delete" button.
+![Delete.PNG](Delete.PNG)
 - Search Applications: Search for job applications based on various criteria.
 - Filter Applications: Filter job applications based on various criteria.
 
@@ -147,14 +162,25 @@ To get started with the application, follow these steps:
 ![users.png](users.png)
 - Create User: Create a new user account.
 - Edit User: Edit user account information.
+
+![edit_user.png](edit_user.png)
+- Click on the "Edit User" button.
 - Delete User: Delete user accounts.
+
+![delete_user.png](delete_user.png)
+- Click on the "Delete User" button.
 - Search Users: Search for user accounts based on various criteria.
 - Filter Users: Filter user accounts based on various criteria.
 - Download User Reports: Download user reports.
 - Export User Data: Export user data.
 - Import User Data: Import user data.
 - Reset User Password: Reset user passwords.
+
+![reset_password.png](reset_password.png)
+- Click on the "Reset Password" button.
 - Lock User Account: Lock user accounts.
+
+![lock_user.png](lock_user.png)
 - Unlock User Account: Unlock user accounts.
 - Suspend User Account: Suspend user accounts.
 - Unsuspend User Account: Unsuspend user accounts.
