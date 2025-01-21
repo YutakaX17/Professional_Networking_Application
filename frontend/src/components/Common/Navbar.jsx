@@ -70,7 +70,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex-shrink-0">
             <Link to={getDashboardLink()} className="text-xl font-bold text-blue-600 hover:text-blue-800 transition duration-300">
-              MJ_App
+              ProNetApp
             </Link>
           </div>
 

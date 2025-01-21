@@ -1,43 +1,276 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { useGetCurrentRole } from "../../utils/roleUtils";
-import { Work } from '@mui/icons-material';
-import BusinessIcon from '@mui/icons-material/Business';
+import {
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  ListItemButton,
+  Collapse,
+  Typography,
+  Divider
+} from '@mui/material';
+import {
+  Dashboard as DashboardIcon,
+  Person as ProfileIcon,
+  Work as JobIcon,
+  People as NetworkIcon,
+  Settings as SettingsIcon,
+  SupervisorAccount as AdminIcon,
+  Message as MessageIcon,
+  Notifications as NotificationsIcon,
+  Logout as LogoutIcon,
+  ExpandLess,
+  ExpandMore,
+  Description as DescriptionIcon,
+  BarChart as BarChartIcon,
+  Business as BusinessIcon,
+  Assignment as AssignmentIcon,
+  Analytics as AnalyticsIcon,
+  Group as GroupIcon,
+  Article as ArticleIcon,
+  Search as SearchIcon,
+  Build as BuildIcon
+} from '@mui/icons-material';
 
-const Sidebar = () => {
+const drawerWidth = 240;
+
+const Sidebar = ({ open, onClose }) => {
+  const location = useLocation();
   const currentRole = useGetCurrentRole();
+  const [expandedItems, setExpandedItems] = React.useState([]);
+
+  const handleExpand = (itemId) => {
+    setExpandedItems(prev =>
+      prev.includes(itemId)
+        ? prev.filter(id => id !== itemId)
+        : [...prev, itemId]
+    );
+  };
+
+  const isSelected = (path) => location.pathname === path;
+
+  const NavigationItem = ({ item }) => {
+    const hasChildren = item.children && item.children.length > 0;
+    const isExpanded = expandedItems.includes(item.id);
+
+    if (item.kind === 'header') {
+      return (
+        <ListItem sx={{ py: 1 }}>
+          <Typography variant="overline" color="text.secondary">
+            {item.title}
+          </Typography>
+        </ListItem>
+      );
+    }
+
+    if (item.kind === 'divider') {
+      return <Divider sx={{ my: 1 }} />;
+    }
+
+    return (
+      <>
+        <ListItem disablePadding>
+          <ListItemButton
+            component={hasChildren ? 'div' : Link}
+            to={hasChildren ? undefined : item.path}
+            onClick={hasChildren ? () => handleExpand(item.id) : undefined}
+            selected={isSelected(item.path)}
+            sx={{
+              minHeight: 48,
+              px: 2.5,
+              '&.Mui-selected': {
+                backgroundColor: 'action.selected',
+                '&:hover': {
+                  backgroundColor: 'action.selected',
+                }
+              }
+            }}
+          >
+            <ListItemIcon sx={{ minWidth: 40 }}>
+              {item.icon}
+            </ListItemIcon>
+            <ListItemText primary={item.title} />
+            {hasChildren && (isExpanded ? <ExpandLess /> : <ExpandMore />)}
+          </ListItemButton>
+        </ListItem>
+        {hasChildren && (
+          <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              {item.children.map((child) => (
+                <ListItemButton
+                  key={child.id}
+                  component={Link}
+                  to={child.path}
+                  selected={isSelected(child.path)}
+                  sx={{
+                    minHeight: 48,
+                    pl: 4,
+                    '&.Mui-selected': {
+                      backgroundColor: 'action.selected',
+                    }
+                  }}
+                >
+                  <ListItemIcon sx={{ minWidth: 40 }}>
+                    {child.icon}
+                  </ListItemIcon>
+                  <ListItemText primary={child.title} />
+                </ListItemButton>
+              ))}
+            </List>
+          </Collapse>
+        )}
+      </>
+    );
+  };
+
+  const getNavigationItems = () => {
+    if (currentRole === 'admin') {
+      return [
+        { kind: 'header', title: 'Administration' },
+        { id: 'dashboard', title: 'Dashboard', icon: <DashboardIcon />, path: '/admin/dashboard' },
+        { id: 'users', title: 'User Management', icon: <AdminIcon />, path: '/admin/users' },
+        { kind: 'divider' },
+        { kind: 'header', title: 'Analytics' },
+        {
+          id: 'reports',
+          title: 'Reports',
+          icon: <BarChartIcon />,
+          children: [
+            { id: 'usage', title: 'Usage Reports', icon: <DescriptionIcon />, path: '/admin/reports/usage' },
+            { id: 'activity', title: 'Activity Logs', icon: <DescriptionIcon />, path: '/admin/reports/activity' }
+          ]
+        },
+        {
+          id: 'system',
+          title: 'System',
+          icon: <BuildIcon />,
+          children: [
+            { id: 'configurations', title: 'Configurations', icon: <SettingsIcon />, path: '/admin/configurations' },
+            { id: 'optimizations', title: 'Optimizations', icon: <AnalyticsIcon />, path: '/admin/optimizations' }
+          ]
+        },
+        { kind: 'divider' },
+        { id: 'logout', title: 'Logout', icon: <LogoutIcon />, path: '/logout' }
+      ];
+    }
+
+    if (currentRole === 'publisher') {
+      return [
+        { kind: 'header', title: 'Main' },
+        { id: 'dashboard', title: 'Dashboard', icon: <DashboardIcon />, path: '/publisher/dashboard' },
+        { id: 'profile', title: 'Company Profile', icon: <BusinessIcon />, path: '/publisher/profile' },
+        { kind: 'divider' },
+        { kind: 'header', title: 'Job Management' },
+        {
+          id: 'jobs',
+          title: 'Jobs',
+          icon: <JobIcon />,
+          children: [
+            { id: 'view-jobs', title: 'View Jobs', icon: <SearchIcon />, path: '/publisher/jobs' },
+            { id: 'create-job', title: 'Create New Job', icon: <ArticleIcon />, path: '/publisher/jobs/create' }
+          ]
+        },
+        {
+          id: 'applications',
+          title: 'Applications',
+          icon: <AssignmentIcon />,
+          children: [
+            { id: 'active', title: 'Active Applications', icon: <DescriptionIcon />, path: '/publisher/applications/active' },
+            { id: 'archived', title: 'Archived', icon: <DescriptionIcon />, path: '/publisher/applications/archived' }
+          ]
+        },
+        { kind: 'divider' },
+        { kind: 'header', title: 'Analytics' },
+        { id: 'analytics', title: 'Analytics', icon: <AnalyticsIcon />, path: '/publisher/analytics' },
+        { id: 'settings', title: 'Settings', icon: <SettingsIcon />, path: '/publisher/settings' }
+      ];
+    }
+
+    if (currentRole === 'seeker') {
+      return [
+        { kind: 'header', title: 'Main' },
+        { id: 'dashboard', title: 'Dashboard', icon: <DashboardIcon />, path: '/seeker/dashboard' },
+        { id: 'profile', title: 'Profile', icon: <ProfileIcon />, path: '/seeker/profile' },
+        { kind: 'divider' },
+        { kind: 'header', title: 'Job Search' },
+        { id: 'jobs', title: 'Find Jobs', icon: <SearchIcon />, path: '/seeker/jobs' },
+        { id: 'applications', title: 'My Applications', icon: <AssignmentIcon />, path: '/seeker/applications' },
+        { kind: 'divider' },
+        { kind: 'header', title: 'Network' },
+        {
+          id: 'network',
+          title: 'Network',
+          icon: <NetworkIcon />,
+          children: [
+            { id: 'connections', title: 'Connections', icon: <GroupIcon />, path: '/seeker/connections' },
+            { id: 'messages', title: 'Messages', icon: <MessageIcon />, path: '/seeker/messages' },
+            { id: 'notifications', title: 'Notifications', icon: <NotificationsIcon />, path: '/seeker/notifications' }
+          ]
+        },
+        { kind: 'divider' },
+        { id: 'resume', title: 'Resume Builder', icon: <ArticleIcon />, path: '/seeker/resume' },
+        { id: 'settings', title: 'Settings', icon: <SettingsIcon />, path: '/seeker/settings' }
+      ];
+    }
+
+    return []; // Default empty navigation if no role matches
+  };
+
+  const drawer = (
+    <Box sx={{ overflow: 'auto' }}>
+      <List>
+        {getNavigationItems().map((item, index) => (
+          <NavigationItem key={item.id || index} item={item} />
+        ))}
+      </List>
+    </Box>
+  );
 
   return (
-    <aside className="bg-blue-600 w-64 p-4 flex flex-col">
-      <ul className="space-y-2">
-        <li>
-          <Link to="/dashboard" className="text-gray-100 hover:text-white">
-            Dashboard
-          </Link>
-        </li>
-        <li>
-          <Link to="/settings" className="text-gray-100 hover:text-white">
-            Settings
-          </Link>
-        </li>
-        {currentRole === 'publisher' && (
-          <>
-            <li>
-              <Link to="/publisher/company-culture/create" className="text-gray-100 hover:text-white">
-                <BusinessIcon className="mr-2" />
-                Create Culture
-              </Link>
-            </li>
-            <li>
-              <Link to="/publisher/jobs/create" className="flex items-center text-gray-100 hover:text-white">
-                <Work className="mr-2" />
-                Job Post
-              </Link>
-            </li>
-          </>
-        )}
-      </ul>
-    </aside>
+    <Box sx={{ display: 'flex', marginTop: '64px'}}>
+      <Box
+        component="nav"
+        sx={{
+          width: { sm: drawerWidth },
+          flexShrink: { sm: 0 }
+        }}
+      >
+        <Drawer
+          variant="temporary"
+          open={open}
+          onClose={onClose}
+          ModalProps={{ keepMounted: true }}
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              boxSizing: 'border-box',
+              borderRight: '1px solid rgba(0, 0, 0, 0.12)'
+            }
+          }}
+        >
+          {drawer}
+        </Drawer>
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: 'none', sm: 'block' },
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              boxSizing: 'border-box',
+              borderRight: '1px solid rgba(0, 0, 0, 0.12)'
+            }
+          }}
+          open
+        >
+          {drawer}
+        </Drawer>
+      </Box>
+    </Box>
   );
 };
 

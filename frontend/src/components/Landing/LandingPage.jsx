@@ -6,7 +6,7 @@ const LandingPage = () => {
     <div className="min-h-screen bg-gradient-to-b from-blue-600 to-blue-800">
       <nav className="container mx-auto px-6 py-4">
         <div className="flex justify-between items-center">
-          <div className="text-white font-bold text-xl">Malawi Jobs</div>
+          <div className="text-white font-bold text-xl">Professional Networking Application</div>
           <div className="space-x-4">
             <Link to="/login" className="text-white hover:text-blue-200">Login</Link>
             <Link to="/signup" className="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50">

@@ -218,7 +218,7 @@ const SignUpComponent = () => {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               Have an account?{' '}
-              <a href="#" className="text-purple-600 hover:underline hover:text-purple-700">
+              <a href="login" className="text-purple-600 hover:underline hover:text-purple-700">
                 Login here
               </a>
             </p>
