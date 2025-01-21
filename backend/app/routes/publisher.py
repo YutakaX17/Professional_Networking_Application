@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, send_file
 from sqlalchemy.exc import IntegrityError
 from .. import db
 from ..models.mj_tables import CompanyCulture, Job, JobCategory, JobType, JobStatus, Application, Resume
