@@ -90,9 +90,9 @@ const handleApply = async (jobId) => {
   }
 };
 
-const handleApplicationSubmit = (formData) => {
-    console.log('handleApplicationSubmit called with:', formData);
-    handleApply(formData);
+const handleApplicationSubmit = () => {
+    console.log('handleApplicationSubmit called');
+    handleApply(selectedJob.id);
   };
 
   const handleApplyClick = () => {
