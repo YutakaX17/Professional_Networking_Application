@@ -3,6 +3,7 @@ from sqlalchemy.exc import IntegrityError
 from .. import db
 from ..models.mj_tables import CompanyCulture, Job, JobCategory, JobType, JobStatus, Application, Resume
 from ..services import FileService
+from ..utils.auth_utils import token_required
 from ..utils.security import decode_token
 import json
 
