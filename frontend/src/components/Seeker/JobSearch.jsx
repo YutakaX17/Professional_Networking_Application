@@ -90,10 +90,11 @@ const handleApply = async (jobId) => {
   }
 };
 
-const handleApplicationSubmit = () => {
-    console.log('handleApplicationSubmit called');
-    handleApply(selectedJob.id);
-  };
+const handleApplicationSubmit = (jobId) => {
+  console.log('Application submitted for job:', jobId);
+  // Refresh the jobs list or update UI as needed
+  setShowApplicationForm(false);
+};
 
   const handleApplyClick = () => {
     console.log('Apply button clicked, showing application form');
