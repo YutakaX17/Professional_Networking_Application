@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import Avatar from "../Seeker/Avatar";
 import axios from 'axios';
 
-const Navbar = () => {
+const Navbar = ({ onMenuClick }) => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 

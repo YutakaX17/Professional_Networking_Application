@@ -50,6 +50,7 @@ To get started with the application, follow these steps:
 ### 3.2. Logging In
 - Click "Login" on the homepage.
 - Enter your username and password.
+
   ![login.png](login.png)
 - Then click "Login" to access your account.
 

@@ -11,7 +11,8 @@ import {
   ListItemButton,
   Collapse,
   Typography,
-  Divider
+  Divider,
+  IconButton
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
@@ -33,16 +34,18 @@ import {
   Group as GroupIcon,
   Article as ArticleIcon,
   Search as SearchIcon,
-  Build as BuildIcon
+  Build as BuildIcon,
+  ChevronLeft as ChevronLeftIcon,
+  Menu as MenuIcon
 } from '@mui/icons-material';
-
-const drawerWidth = 240;
 
 const Sidebar = ({ open, onClose }) => {
   const location = useLocation();
   const currentRole = useGetCurrentRole();
   const [expandedItems, setExpandedItems] = React.useState([]);
+  const [isExpanded, setIsExpanded] = React.useState(true);
 
+  const drawerWidth = isExpanded ? 240 : 64;
   const handleExpand = (itemId) => {
     setExpandedItems(prev =>
       prev.includes(itemId)
@@ -51,20 +54,27 @@ const Sidebar = ({ open, onClose }) => {
     );
   };
 
+  const toggleDrawer = () => {
+    setIsExpanded(!isExpanded);
+    if (!isExpanded) {
+      setExpandedItems([]); // Close all expanded items when collapsing
+    }
+  };
+
   const isSelected = (path) => location.pathname === path;
 
   const NavigationItem = ({ item }) => {
     const hasChildren = item.children && item.children.length > 0;
-    const isExpanded = expandedItems.includes(item.id);
+    const isItemExpanded = expandedItems.includes(item.id);
 
     if (item.kind === 'header') {
-      return (
+      return isExpanded ? (
         <ListItem sx={{ py: 1 }}>
           <Typography variant="overline" color="text.secondary">
             {item.title}
           </Typography>
         </ListItem>
-      );
+      ) : null;
     }
 
     if (item.kind === 'divider') {
@@ -81,6 +91,7 @@ const Sidebar = ({ open, onClose }) => {
             selected={isSelected(item.path)}
             sx={{
               minHeight: 48,
+              justifyContent: isExpanded ? 'initial' : 'center',
               px: 2.5,
               '&.Mui-selected': {
                 backgroundColor: 'action.selected',
@@ -90,15 +101,25 @@ const Sidebar = ({ open, onClose }) => {
               }
             }}
           >
-            <ListItemIcon sx={{ minWidth: 40 }}>
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: isExpanded ? 2 : 'auto',
+                justifyContent: 'center',
+              }}
+            >
               {item.icon}
             </ListItemIcon>
-            <ListItemText primary={item.title} />
-            {hasChildren && (isExpanded ? <ExpandLess /> : <ExpandMore />)}
+            {isExpanded && (
+              <>
+                <ListItemText primary={item.title} />
+                {hasChildren && (isItemExpanded ? <ExpandLess /> : <ExpandMore />)}
+              </>
+            )}
           </ListItemButton>
         </ListItem>
-        {hasChildren && (
-          <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+        {hasChildren && isItemExpanded && isExpanded && (
+          <Collapse in={isItemExpanded} timeout="auto" unmountOnExit>
             <List component="div" disablePadding>
               {item.children.map((child) => (
                 <ListItemButton
@@ -222,6 +243,17 @@ const Sidebar = ({ open, onClose }) => {
 
   const drawer = (
     <Box sx={{ overflow: 'auto' }}>
+      <Box sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: isExpanded ? 'flex-end' : 'center',
+        padding: '8px'
+      }}>
+        <IconButton onClick={toggleDrawer}>
+          {isExpanded ? <ChevronLeftIcon /> : <MenuIcon />}
+        </IconButton>
+      </Box>
+      <Divider />
       <List>
         {getNavigationItems().map((item, index) => (
           <NavigationItem key={item.id || index} item={item} />
@@ -231,12 +263,13 @@ const Sidebar = ({ open, onClose }) => {
   );
 
   return (
-    <Box sx={{ display: 'flex', marginTop: '64px'}}>
+    <Box sx={{ display: 'flex', marginTop: '64px' }}>
       <Box
         component="nav"
         sx={{
           width: { sm: drawerWidth },
-          flexShrink: { sm: 0 }
+          flexShrink: { sm: 0 },
+          transition: 'width 0.2s ease-in-out'
         }}
       >
         <Drawer
@@ -249,7 +282,8 @@ const Sidebar = ({ open, onClose }) => {
             '& .MuiDrawer-paper': {
               width: drawerWidth,
               boxSizing: 'border-box',
-              borderRight: '1px solid rgba(0, 0, 0, 0.12)'
+              borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+              transition: 'width 0.2s ease-in-out'
             }
           }}
         >
@@ -262,7 +296,10 @@ const Sidebar = ({ open, onClose }) => {
             '& .MuiDrawer-paper': {
               width: drawerWidth,
               boxSizing: 'border-box',
-              borderRight: '1px solid rgba(0, 0, 0, 0.12)'
+              borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+              marginTop: '64px',
+              transition: 'width 0.2s ease-in-out',
+              overflowX: 'hidden'
             }
           }}
           open
