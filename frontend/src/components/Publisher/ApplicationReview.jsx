@@ -13,16 +13,48 @@ import {
   DialogTitle,
   DialogContent,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+{/*import { useNavigate } from 'react-router-dom';*/}
+
 
 const ApplicationReview = () => {
   const [applications, setApplications] = useState([]);
   const [selectedApplication, setSelectedApplication] = useState(null);
-  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  {/*const navigate = useNavigate();*/}
 
   useEffect(() => {
     fetchApplications();
   }, []);
+
+  const handleViewProfile = (event, seeker_id) => {
+    event.stopPropagation();
+
+    const fetchApplicantDetails = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/seeker/profile/${seeker_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          }
+        );
+
+        setSelectedApplication(response.data);
+        setOpen(true);
+      } catch (error) {
+        console.error('Failed to fetch applicant details:', error);
+      }
+    };
+
+    fetchApplicantDetails();
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedApplication(null);
+  };
 
   const fetchApplications = async () => {
     try {
@@ -96,7 +128,7 @@ const ApplicationReview = () => {
               <TableCell>{app.job.title}</TableCell>
               <TableCell>
                 <Button
-                  onClick={() => navigate(`/seeker/profile/${app.seeker_id}`)}
+                  onClick={(e) => handleViewProfile(e, app.seeker_id)}
                   color="primary"
                 >
                   View Profile
@@ -146,6 +178,25 @@ const ApplicationReview = () => {
           ))}
         </TableBody>
       </Table>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Applicant Profile</DialogTitle>
+        <DialogContent>
+          {selectedApplication && (
+            <div>
+              <Typography variant="h6">Name: {selectedApplication.full_name}</Typography>
+              <Typography variant="body1">Location: {selectedApplication.location}</Typography>
+              <Typography variant="body1">Skills: {selectedApplication.skills?.join(', ')}</Typography>
+              <Typography variant="body1">
+                Experience: {selectedApplication.experience?.years} years
+              </Typography>
+              <Typography variant="body1">
+                Education: {selectedApplication.education?.degree}
+              </Typography>
+              <Typography variant="body1">Bio: {selectedApplication.bio}</Typography>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </Paper>
   );
 };

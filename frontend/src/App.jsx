@@ -19,6 +19,7 @@ import Analytics from './components/Publisher/Analytics';
 import CompanyCultureCreate from "./components/Publisher/CompanyCultureCreate";
 import CompanyCultureView from "./components/Publisher/CompanyCultureView";
 import CreateNewJobPost from "./components/Publisher/CreateNewJobPost";
+import ApplicationReview from "./components/Publisher/ApplicationReview";
 
 // Seeker Components
 import SeekerDashboard from './components/Seeker/SeekerDashboard';
@@ -82,6 +83,7 @@ const AppContent = () => {
                       <Route path="/publisher/company-culture/create" element={<CompanyCultureCreate/>}/>
                       <Route path="/publisher/company-culture" element={<CompanyCultureView/>}/>
                       <Route path="/publisher/jobs/create" element={<CreateNewJobPost/>}/>
+                      <Route path="/publisher/applications/review" element={<ApplicationReview />} />
 
                       {/* Seeker Routes */}
                       <Route path="/seeker" element={<SeekerDashboard/>}/>

@@ -200,7 +200,7 @@ const Sidebar = ({ open, onClose }) => {
           title: 'Applications',
           icon: <AssignmentIcon />,
           children: [
-            { id: 'active', title: 'Active Applications', icon: <DescriptionIcon />, path: '/publisher/applications/active' },
+            { id: 'active', title: 'Active Applications', icon: <DescriptionIcon />, path: '/publisher/applications/review' },
             { id: 'archived', title: 'Archived', icon: <DescriptionIcon />, path: '/publisher/applications/archived' }
           ]
         },
